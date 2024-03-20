@@ -7,6 +7,8 @@ import { ref, computed } from 'vue'
 import LockPage from './components/LockPage.vue'
 import { useLockStore } from '@/store/modules/lock'
 import { useUserStore } from '@/store/modules/user'
+import UserPasswordFormDialog from '@/views/components/UserPasswordFormDialog'
+import type { UserPasswordFormDialogInstance } from '@/views/components/UserPasswordFormDialog'
 
 const userStore = useUserStore()
 
@@ -23,6 +25,13 @@ const loginOut = () => {
 }
 
 const dialogVisible = ref<boolean>(false)
+
+/* 用户密码表单弹窗 */
+const userPasswordFormDialogRef = ref<UserPasswordFormDialogInstance>()
+/* 打开用户密码表单弹窗 */
+const openUserPasswordFormDialog = (businessType: string) => {
+  userPasswordFormDialogRef.value!.openUserPasswordFormDialog(businessType)
+}
 
 // 锁定屏幕
 const lockScreen = () => {
@@ -41,6 +50,9 @@ const lockScreen = () => {
     <template #dropdown>
       <ElDropdownMenu>
         <ElDropdownItem>
+          <div @click="openUserPasswordFormDialog('change')">修改密码</div>
+        </ElDropdownItem>
+        <ElDropdownItem>
           <div @click="lockScreen">锁定屏幕</div>
         </ElDropdownItem>
         <ElDropdownItem>
@@ -50,6 +62,7 @@ const lockScreen = () => {
     </template>
   </ElDropdown>
 
+  <UserPasswordFormDialog ref="userPasswordFormDialogRef" />
   <LockDialog v-if="dialogVisible" v-model="dialogVisible" />
   <teleport to="body">
     <transition name="fade-bottom" mode="out-in">

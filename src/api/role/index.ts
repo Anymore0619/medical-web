@@ -4,6 +4,10 @@ import request from '@/axios'
 export const getRolePageApi = (params): Promise<IResponse> => {
   return request.get({ url: '/sys/sysRole/page', params })
 }
+/* 获取角色列表 */
+export const getRoleListApi = (params): Promise<IResponse> => {
+  return request.get({ url: '/sys/sysRole/list', params })
+}
 /* 新增角色 */
 export const addRoleApi = (data): Promise<IResponse> => {
   return request.post({ url: '/sys/sysRole/save', data })
@@ -16,11 +20,11 @@ export const editRoleApi = (data): Promise<IResponse> => {
 export const deleteRoleApi = (data): Promise<IResponse> => {
   return request.post({ url: '/sys/sysRole/del', data })
 }
-/* 获取角色权限 */
-export const getRoleAuthorityApi = (params): Promise<IResponse> => {
+/* 获取角色菜单列表 */
+export const getRoleMenuListApi = (params): Promise<IResponse> => {
   return request.get({ url: '/sys/sysMenuLink/list', params })
 }
-/* 编辑角色权限 */
-export const editRoleAuthorityApi = (data): Promise<IResponse> => {
+/* 编辑角色菜单列表 */
+export const editRoleMenuListApi = (data): Promise<IResponse> => {
   return request.post({ url: '/sys/sysMenuLink/save', data })
 }

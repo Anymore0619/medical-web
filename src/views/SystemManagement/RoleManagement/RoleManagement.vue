@@ -9,9 +9,9 @@
   </ProCard>
   <ProFormDialog v-bind="roleFormDialog" v-model:show="roleFormDialog.show" />
   <ProFormDialog
-    ref="authorityFormDialogRef"
-    v-bind="authorityFormDialog"
-    v-model:show="authorityFormDialog.show"
+    ref="menuFormDialogRef"
+    v-bind="menuFormDialog"
+    v-model:show="menuFormDialog.show"
   />
 </template>
 
@@ -22,8 +22,8 @@ import {
   addRoleApi,
   editRoleApi,
   deleteRoleApi,
-  getRoleAuthorityApi,
-  editRoleAuthorityApi
+  getRoleMenuListApi,
+  editRoleMenuListApi
 } from '@/api/role'
 import { getFormItemIndex, setFormItem } from '@/utils/component-library'
 import { cloneDeep } from 'lodash-es'
@@ -44,27 +44,33 @@ onMounted(() => {
 const getMenuTree = async () => {
   const res = await getMenuTreeApi({})
   if (res) {
-    setFormItem(authorityFormDialog.formProps!.items!, {
+    setFormItem(menuFormDialog.formProps!.items!, {
       key: 'menuList',
       path: 'itemProps.data',
       value: res.data.menuData
     })
-    const index = getFormItemIndex(authorityFormDialog.formProps!.items!, 'menuList')!
-    expandAllTreeNode(authorityFormDialogRef.value!, index, res.data.menuData)
+    const index = getFormItemIndex(menuFormDialog.formProps!.items!, 'menuList')!
+    expandAllTreeNode(menuFormDialogRef.value!, index, res.data.menuData)
   }
 }
-/* 获取角色权限 */
-const getRoleAuthority = async () => {
-  const { id } = authorityFormDialog.formProps!.model!
+/* 获取角色菜单列表 */
+const getRoleMenuList = async () => {
+  const { id } = menuFormDialog.formProps!.model!
   const params = {
     roleId: id
   }
-  const res = await getRoleAuthorityApi(params)
+  const res = await getRoleMenuListApi(params)
   if (res) {
+    menuFormDialog.formProps!.model!.menuList = res.data.map((item) => {
+      const { menuId } = item
+      return {
+        id: menuId
+      }
+    })
   }
 }
 /* 删除角色 */
-const deleteMenu = (row: Record<string, any>) => {
+const deleteRole = (row: Record<string, any>) => {
   const { id, name } = row!
   ElMessageBox.confirm(`是否确定删除【${name}】角色？`, '提示', { type: 'warning' })
     .then(async () => {
@@ -101,7 +107,6 @@ const searchTable = reactive<ProSearchTableProps>({
         prop: 'name'
       },
       {
-        dict: [],
         label: '备注',
         minWidth: 120,
         prop: 'remark'
@@ -110,19 +115,19 @@ const searchTable = reactive<ProSearchTableProps>({
         actions: [
           {
             click: (row) => {
+              openMenuFormDialog('association', row!)
+            },
+            label: '菜单'
+          },
+          {
+            click: (row) => {
               openRoleFormDialog('edit', row!)
             },
             label: '编辑'
           },
           {
             click: (row) => {
-              openAuthorityFormDialog('set', row!)
-            },
-            label: '权限'
-          },
-          {
-            click: (row) => {
-              deleteMenu(row!)
+              deleteRole(row!)
             },
             label: '删除'
           }
@@ -202,9 +207,9 @@ const openRoleFormDialog = (businessType: string, row?: Record<string, any>) => 
     }
   })
 }
-/* 权限表单弹窗 */
-const authorityFormDialogRef = ref<ProFormDialogInstance>()
-const authorityFormDialog = reactive<ProFormDialogProps>({
+/* 菜单表单弹窗 */
+const menuFormDialogRef = ref<ProFormDialogInstance>()
+const menuFormDialog = reactive<ProFormDialogProps>({
   businessType: '',
   customRequestParams: (params) => {
     const { id, menuList } = params
@@ -215,7 +220,7 @@ const authorityFormDialog = reactive<ProFormDialogProps>({
   },
   dialogProps: {
     beforeClose: () => {
-      authorityFormDialog.formProps!.items = cloneDeep(authorityFormDialogFormItemsClone)
+      menuFormDialog.formProps!.items = cloneDeep(menuFormDialogFormItemsClone)
     },
     title: ''
   },
@@ -250,25 +255,25 @@ const authorityFormDialog = reactive<ProFormDialogProps>({
   requestApi: undefined,
   show: false
 })
-/* 打开权限表单弹窗 */
-const openAuthorityFormDialog = (businessType: string, row?: Record<string, any>) => {
-  authorityFormDialog.businessType = businessType
-  authorityFormDialog.show = true
+/* 打开菜单表单弹窗 */
+const openMenuFormDialog = (businessType: string, row?: Record<string, any>) => {
+  menuFormDialog.businessType = businessType
+  menuFormDialog.show = true
   nextTick(async () => {
-    if (businessType === 'set') {
-      authorityFormDialog.dialogProps!.title = '设置角色权限'
-      authorityFormDialog.requestApi = editRoleAuthorityApi
+    if (businessType === 'association') {
+      menuFormDialog.dialogProps!.title = '关联角色菜单'
+      menuFormDialog.requestApi = editRoleMenuListApi
     }
     const { id } = row!
-    Object.assign(authorityFormDialog.formProps!.model!, {
+    Object.assign(menuFormDialog.formProps!.model!, {
       id
     })
     await getMenuTree()
-    getRoleAuthority()
+    getRoleMenuList()
   })
 }
-/* 权限表单弹窗表单项克隆 */
-const authorityFormDialogFormItemsClone = cloneDeep(authorityFormDialog.formProps!.items)
+/* 菜单表单弹窗表单项克隆 */
+const menuFormDialogFormItemsClone = cloneDeep(menuFormDialog.formProps!.items)
 /* 展开所有树节点 */
 const expandAllTreeNode = (
   ref: ProFormDialogInstance,

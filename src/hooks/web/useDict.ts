@@ -1,4 +1,4 @@
-import { getDictionaryListApi } from '@/api/dictionary'
+import { getDictionaryDataListApi } from '@/api/dictionary'
 import { isString } from '@/utils/is'
 
 export type UseDictReturnType = {
@@ -20,7 +20,7 @@ export const useDict = async (typeCode?: string | string[]): Promise<UseDictRetu
       const params = {
         typeCode: typeCodeList.join(',')
       }
-      const res = await getDictionaryListApi(params)
+      const res = await getDictionaryDataListApi(params)
       if (res) {
         for (const key in res.data) {
           const list = JSON.parse(res.data[key]) || []

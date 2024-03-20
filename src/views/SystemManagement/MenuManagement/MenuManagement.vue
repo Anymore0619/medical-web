@@ -67,12 +67,7 @@ const searchTable = reactive<ProSearchTableProps>({
   responseMapping: (response) => {
     const { menuData } = response.data
     return {
-      data: menuData.map((menu) => {
-        return {
-          ...menu,
-          pid: menu.parentId
-        }
-      })
+      data: menuData
     }
   },
   tableProps: {
@@ -191,10 +186,7 @@ const menuFormDialog = reactive<ProFormDialogProps>({
         span: 12
       },
       {
-        itemProps: {
-          min: 0
-        },
-        itemType: 'inputNumber',
+        itemType: 'input',
         label: '菜单图标',
         prop: 'icon',
         span: 12

@@ -8,7 +8,6 @@ export const constantRouterMap: AppRouteRecordRaw[] = [
   {
     path: '/',
     component: Layout,
-    redirect: '/home/index',
     name: 'Root',
     meta: {
       hidden: true
@@ -56,7 +55,9 @@ export const constantRouterMap: AppRouteRecordRaw[] = [
 export const asyncRouterMap: AppRouteRecordRaw[] = [
   {
     path: '/home',
-    redirect: '/home/index',
+    redirect: (to) => {
+      return `${to.path}/${to.matched[0].children[0].path}`
+    },
     component: Layout,
     name: 'Home',
     meta: {},
@@ -75,7 +76,9 @@ export const asyncRouterMap: AppRouteRecordRaw[] = [
   },
   {
     path: '/system-management',
-    redirect: '/system-management/menu-management',
+    redirect: (to) => {
+      return `${to.path}/${to.matched[0].children[0].path}`
+    },
     component: Layout,
     meta: {
       icon: 'ep:setting',
@@ -83,6 +86,35 @@ export const asyncRouterMap: AppRouteRecordRaw[] = [
     },
     name: 'SystemManagement',
     children: [
+      {
+        path: 'organization-management',
+        component: () =>
+          import('@/views/SystemManagement/OrganizationManagement/OrganizationManagement.vue'),
+        name: 'OrganizationManagement',
+        meta: {
+          icon: 'ep:school',
+          title: '机构管理'
+        }
+      },
+      {
+        path: 'department-management',
+        component: () =>
+          import('@/views/SystemManagement/DepartmentManagement/DepartmentManagement.vue'),
+        name: 'DepartmentManagement',
+        meta: {
+          icon: 'ep:collection-tag',
+          title: '部门管理'
+        }
+      },
+      {
+        path: 'user-management',
+        component: () => import('@/views/SystemManagement/UserManagement/UserManagement.vue'),
+        name: 'UserManagement',
+        meta: {
+          icon: 'ep:user-filled',
+          title: '用户管理'
+        }
+      },
       {
         path: 'role-management',
         component: () => import('@/views/SystemManagement/RoleManagement/RoleManagement.vue'),

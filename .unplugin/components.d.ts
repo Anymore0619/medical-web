@@ -8,6 +8,8 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     ActionButton: typeof import('./../src/views/components/ActionButton/src/ActionButton.vue')['default']
+    EmployeePasswordFormDialog: typeof import('./../src/views/components/UserPasswordFormDialog/src/EmployeePasswordFormDialog.vue')['default']
+    ProAffix: typeof import('component-library')['ProAffix']
     ProButton: typeof import('component-library')['ProButton']
     ProCard: typeof import('component-library')['ProCard']
     ProConfigProvider: typeof import('component-library')['ProConfigProvider']
@@ -19,7 +21,9 @@ declare module 'vue' {
     ProSearchTableDialog: typeof import('component-library')['ProSearchTableDialog']
     ProSelect: typeof import('component-library')['ProSelect']
     ProText: typeof import('component-library')['ProText']
+    ProTree: typeof import('component-library')['ProTree']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    UserPasswordFormDialog: typeof import('./../src/views/components/UserPasswordFormDialog/src/UserPasswordFormDialog.vue')['default']
   }
 }

@@ -6,6 +6,7 @@ import { Form, FormSchema } from '@/components/Form'
 import { ElCheckbox } from 'element-plus'
 import { useForm } from '@/hooks/web/useForm'
 import { loginApi } from '@/api/login'
+import { getUserMenuListApi } from '@/api/user'
 import { useAppStore } from '@/store/modules/app'
 import { usePermissionStore } from '@/store/modules/permission'
 import { useRouter } from 'vue-router'
@@ -14,6 +15,7 @@ import { useValidator } from '@/hooks/web/useValidator'
 // import { Icon } from '@/components/Icon'
 import { useUserStore } from '@/store/modules/user'
 import { BaseButton } from '@/components/Button'
+import { treeToList } from '@/utils/tree'
 
 const { required } = useValidator()
 
@@ -247,7 +249,7 @@ const signIn = async () => {
           userStore.setToken(res.data.access_token)
           // 是否使用动态路由
           if (appStore.getDynamicRouter) {
-            getRole()
+            getUserMenuList()
           } else {
             await permissionStore.generateRoutes('static').catch(() => {})
             permissionStore.getAddRouters.forEach((route) => {
@@ -264,23 +266,16 @@ const signIn = async () => {
   })
 }
 
-// 获取角色信息
-const getRole = async () => {
-  // const params = {}
-  // const res =
-  //   appStore.getDynamicRouter && appStore.getServerDynamicRouter
-  //     ? await getAdminRoleApi(params)
-  //     : await getTestRoleApi(params)
-  const res = {
-    data: []
-  }
+// 获取用户菜单列表
+const getUserMenuList = async () => {
+  const params = {}
+  const res = await getUserMenuListApi(params)
   if (res) {
-    const routers = res.data || []
+    const routers = treeToList(res.data.menuData, { pid: 'parentId' }).map((menu) => menu.url) || []
     userStore.setRoleRouters(routers)
     appStore.getDynamicRouter && appStore.getServerDynamicRouter
       ? await permissionStore.generateRoutes('server', routers).catch(() => {})
       : await permissionStore.generateRoutes('frontEnd', routers).catch(() => {})
-
     permissionStore.getAddRouters.forEach((route) => {
       addRoute(route as RouteRecordRaw) // 动态添加可访问路由表
     })

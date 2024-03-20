@@ -1,10 +1,5 @@
 import request from '@/axios'
 
-/* 获取字典列表 */
-export const getDictionaryListApi = (params): Promise<IResponse> => {
-  return request.get({ url: '/sys/sysDict/getDict', params })
-}
-
 /* 获取字典类型分页 */
 export const getDictionaryTypePageApi = (params): Promise<IResponse> => {
   return request.get({ url: '/sys/sysDictType/page', params })
@@ -24,6 +19,10 @@ export const deleteDictionaryTypeApi = (data): Promise<IResponse> => {
 /* 获取字典数据分页 */
 export const getDictionaryDataPageApi = (params): Promise<IResponse> => {
   return request.get({ url: '/sys/sysDict/page', params })
+}
+/* 获取字典数据列表 */
+export const getDictionaryDataListApi = (params): Promise<IResponse> => {
+  return request.get({ url: '/sys/sysDict/getDict', params })
 }
 /* 新增字典数据 */
 export const addDictionaryDataApi = (data): Promise<IResponse> => {

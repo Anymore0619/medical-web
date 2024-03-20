@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { getDictionaryListApi } from '@/api/dictionary'
+import { getDictionaryDataListApi } from '@/api/dictionary'
 import { store } from '../index'
 
 interface DictionaryState {
@@ -36,7 +36,7 @@ export const useDictionaryStore = defineStore('lock', {
       const params = {
         typeCode: ''
       }
-      const res = await getDictionaryListApi(params)
+      const res = await getDictionaryDataListApi(params)
       if (res) {
         this.setDictionary(res.data)
         this.setIsIntDictionary(true)
