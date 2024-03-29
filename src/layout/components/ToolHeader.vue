@@ -22,9 +22,6 @@ const hamburger = computed(() => appStore.getHamburger)
 // 全屏图标
 const screenfull = computed(() => appStore.getScreenfull)
 
-// 尺寸图标
-const size = computed(() => appStore.getSize)
-
 // 布局
 const layout = computed(() => appStore.getLayout)
 

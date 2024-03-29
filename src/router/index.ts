@@ -41,6 +41,16 @@ export const constantRouterMap: AppRouteRecordRaw[] = [
     }
   },
   {
+    path: '/dicom',
+    component: () => import('@/views/Dicom/Dicom.vue'),
+    name: 'Dicom',
+    meta: {
+      hidden: true,
+      title: 'Dicom',
+      noTagsView: true
+    }
+  },
+  {
     path: '/404',
     component: () => import('@/views/Error/404.vue'),
     name: 'NoFind',

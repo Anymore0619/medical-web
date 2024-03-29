@@ -26,6 +26,6 @@
     },
     "types": ["vite/client", "element-plus/global", "@types/qrcode", "vite-plugin-svg-icons/client"]
   },
-  "include": ["src", "types/**/*.d.ts", "mock/**/*.ts", ".unplugin/*.d.ts"]
-  // "exclude": ["dist", "node_modules"]
+  "include": ["src", "types/**/*.d.ts", "mock/**/*.ts", ".unplugin/*.d.ts"],
+  "exclude": ["dist", "node_modules"]
 }
